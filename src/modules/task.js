@@ -14,3 +14,10 @@ export const typeDef = gql`
     deleteTask(id: ID!): Boolean!
   }
 `;
+
+export const resolvers = {
+  Task: {
+    id: ({ _id, id }) => _id || id,
+    project: async ({ projectId }, _, { db }) => await db.collection('Projects').findOne({ _id: ObjectId(projectId) }),
+  },
+};
