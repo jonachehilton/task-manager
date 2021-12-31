@@ -1,4 +1,5 @@
 const { gql } = require('apollo-server');
+const { ObjectId } = require('mongodb');
 
 export const typeDef = gql`
   type Task {
@@ -19,5 +20,35 @@ export const resolvers = {
   Task: {
     id: ({ _id, id }) => _id || id,
     project: async ({ projectId }, _, { db }) => await db.collection('Projects').findOne({ _id: ObjectId(projectId) }),
+  },
+
+  Mutation: {
+    createTask: async (_, { projectId, content }, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      const newTask = {
+        projectId: ObjectId(projectId),
+        content,
+        completed: false,
+      }
+
+      await db.collection('Tasks').insertOne(newTask);
+      return await db.collection('Tasks').findOne({ _id: ObjectId(newTask._id) });
+
+    },
+    updateTask: async (_, data, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      await db.collection('Tasks').updateOne({ _id: ObjectId(data.id) }, { $set: data });
+
+      return await db.collection('Tasks').findOne({ _id: ObjectId(data.id) });
+    },
+    deleteTask: async (_, { id }, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      await db.collection('Tasks').deleteOne({ _id: ObjectId(id) });
+
+      return true;
+    },
   },
 };
