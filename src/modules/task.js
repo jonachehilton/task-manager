@@ -7,4 +7,10 @@ export const typeDef = gql`
     completed: Boolean!
     project: Project!
   }
+
+  extend type Mutation {
+    createTask(projectId: ID!, content: String!): Task!
+    updateTask(id: ID!, content: String, completed: Boolean): Task!
+    deleteTask(id: ID!): Boolean!
+  }
 `;
