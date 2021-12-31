@@ -37,4 +37,17 @@ export const resolvers = {
     users: async ({ userIds }, _, { db }) => await Promise.all(userIds.map(userId => db.collection('Users').findOne({ _id: ObjectId(userId) }))) ,
     tasks: async ({ _id }, _, { db }) => await db.collection('Tasks').find({ projectId: ObjectId(_id) }).toArray(),
   },
+
+  Query: {
+    myProjects: async (_, __, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      return await db.collection('Projects').find({ userIds: user._id }).toArray();
+    },
+    getProject: async (_, { id }, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      return await db.collection('Projects').findOne({ _id: ObjectId(id) });
+    },
+  },
 }
