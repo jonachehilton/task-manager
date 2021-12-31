@@ -1,4 +1,6 @@
 const { gql } = require('apollo-server');
+const bcrypt = require('bcryptjs');
+const { getToken } = require('src/utils/auth');
 
 export const typeDef = gql`
   type User {
@@ -32,3 +34,27 @@ export const typeDef = gql`
     password: String!
   }
 `
+
+export const resolvers = {
+  User: {
+    id: ({ _id, id }) => _id || id,
+  },
+  
+  Mutation: {
+    signUp: async (_, { input }, { db }) => {
+      const hashedPassword = bcrypt.hashSync(input.password);
+      const newUser = {
+        ...input,
+        password: hashedPassword,
+      }
+
+      const result = await db.collection('Users').insertOne(newUser);
+      const user = await db.collection('Users').findOne({_id: result.insertedId});
+
+      return {
+        user: user,
+        token: getToken(user),
+      }
+    },
+  }
+};
