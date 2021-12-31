@@ -50,4 +50,44 @@ export const resolvers = {
       return await db.collection('Projects').findOne({ _id: ObjectId(id) });
     },
   },
+
+  Mutation: {
+    createProject: async (_, { title }, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      const newProject = {
+        title: title,
+        createdAt: new Date().toISOString(),
+        userIds: [user._id],
+      }
+
+      const result = await db.collection('Projects').insertOne(newProject);
+      return await db.collection('Projects').findOne({_id: result.insertedId});
+    },
+    updateProject: async (_, { id, title }, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      await db.collection('Projects').updateOne({ _id: ObjectId(id) }, { $set: { title } });
+
+      return await db.collection('Projects').findOne({ _id: ObjectId(id) });
+    },
+    deleteProject: async (_, { id }, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      await db.collection('Projects').deleteOne({ _id: ObjectId(id) });
+
+      return true;
+    },
+    addUserToProject: async (_, { projectId, userId }, { db, user }) => {
+      if (!user) throw new Error('Authentication Error. Please sign in.');
+
+      const project = await db.collection('Projects').findOne({ _id: ObjectId(projectId) });
+      if (!project) throw new Error('Project not found');
+
+      await db.collection('Projects').updateOne({ _id: ObjectId(projectId) }, { $addToSet: { userIds: ObjectId(userId) } });
+
+
+      return await db.collection('Projects').findOne({ _id: ObjectId(projectId) });
+    },
+  }
 }
