@@ -8,4 +8,22 @@ export const typeDef = gql`
     email: String!
     avatar: String
   }
+
+  type AuthUser {
+    user: User!
+    token: String!
+  }
+
+  extend type Mutation {
+    signUp(input: SignUpInput!): AuthUser!
+  } 
+
+  input SignUpInput {
+    firstName: String!
+    lastName: String!
+    email: String!
+    password: String!
+    avatar: String
+  }
+  
 `
