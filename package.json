@@ -1,7 +1,7 @@
 {
-  "name": "todo",
+  "name": "task-manager",
   "version": "1.0.0",
-  "description": "",
+  "description": "Task management server using ApolloServer and MongoDB",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -11,8 +11,8 @@
     "lint-fix": "eslint src/ --fix"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Jonache Hilton",
+  "license": "MIT",
   "dependencies": {
     "@graphql-tools/schema": "^8.3.1",
     "apollo-server": "^3.5.0",
