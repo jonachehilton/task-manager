@@ -1,6 +1,6 @@
-import { gql } from 'apollo-server'
-import bcrypt from 'bcryptjs'
-import { getToken } from '../utils/auth.js'
+import { gql } from 'apollo-server';
+import bcrypt from 'bcryptjs';
+import { getToken } from '../utils/auth';
 
 export const typeDef = gql`
   type User {
@@ -33,28 +33,28 @@ export const typeDef = gql`
     email: String!
     password: String!
   }
-`
+`;
 
 export const resolvers = {
   User: {
     id: ({ _id, id }) => _id || id,
   },
-  
+
   Mutation: {
     signUp: async (_, { input }, { db }) => {
       const hashedPassword = bcrypt.hashSync(input.password);
       const newUser = {
         ...input,
         password: hashedPassword,
-      }
+      };
 
       const result = await db.collection('Users').insertOne(newUser);
-      const user = await db.collection('Users').findOne({_id: result.insertedId});
+      const user = await db.collection('Users').findOne({ _id: result.insertedId });
 
       return {
-        user: user,
+        user,
         token: getToken(user),
-      }
+      };
     },
 
     signIn: async (_, { input }, { db }) => {
@@ -62,11 +62,11 @@ export const resolvers = {
       const isPasswordCorrect = user && bcrypt.compareSync(input.password, user.password);
 
       if (!user || !isPasswordCorrect) throw new Error('Invalid credentials');
-      
+
       return {
         user,
         token: getToken(user),
-      }
+      };
     },
-  }
+  },
 };

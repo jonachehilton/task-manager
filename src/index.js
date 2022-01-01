@@ -1,21 +1,22 @@
-import dotenv from 'dotenv'
-dotenv.config()
 import { ApolloServer } from 'apollo-server';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { MongoClient } from 'mongodb';
-import merge from 'lodash/merge.js'
+import merge from 'lodash/merge';
+import dotenv from 'dotenv';
 
-import { getUserFromToken } from './utils/auth.js';
-import { typeDef as User, resolvers as userResolvers } from './modules/user.js'
-import { typeDef as Project, resolvers as projectResolvers } from './modules/project.js'
-import { typeDef as Task, resolvers as taskResolvers } from './modules/task.js'
+dotenv.config();
 
-const Query = `type Query`;
-const Mutation = `type Mutation`;
+import { getUserFromToken } from './utils/auth';
+import { typeDef as User, resolvers as userResolvers } from './modules/user';
+import { typeDef as Project, resolvers as projectResolvers } from './modules/project';
+import { typeDef as Task, resolvers as taskResolvers } from './modules/task';
+
+const Query = 'type Query';
+const Mutation = 'type Mutation';
 
 async function start() {
   const client = new MongoClient(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-  await client.connect()
+  await client.connect();
   const db = client.db();
 
   const schema = makeExecutableSchema({
@@ -31,12 +32,12 @@ async function start() {
       return {
         db,
         user,
-      }
+      };
     },
   });
   server.listen().then(({ url }) => {
-    console.log(`Server ready at ${url}`);
+    console.log(`Apollo Server ready at ${url}`);
   });
 }
 
-start()
+start();
