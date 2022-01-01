@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "lint": "eslint src/",
+    "lint-fix": "eslint src/ --fix"
   },
   "keywords": [],
   "author": "",
@@ -22,5 +24,10 @@
     "mongodb": "^4.2.2",
     "mongoose": "^6.1.4",
     "nodemon": "^2.0.15"
+  },
+  "devDependencies": {
+    "eslint": "^8.6.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3"
   }
 }
