@@ -1,5 +1,5 @@
-const { gql } = require('apollo-server');
-const { ObjectId } = require('mongodb');
+import { gql } from 'apollo-server'
+import { ObjectId } from 'mongodb';
 
 export const typeDef = gql`
   type Task {
