@@ -36,7 +36,7 @@ export const resolvers = {
       return (completedTasks.length / tasks.length) * 100;
     },
     users: async ({ userIds }, _, { db }) => {
-      return await Promise.all(userIds.map((userId) => db.collection('Users').findOne({ _id: ObjectId(userId) })));
+      Promise.all(userIds.map((userId) => db.collection('Users').findOne({ _id: ObjectId(userId) })));
     },
     tasks: async ({ _id }, _, { db }) => db.collection('Tasks').find({ projectId: ObjectId(_id) }).toArray(),
   },
