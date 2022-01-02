@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { ObjectId } from 'mongodb';
 
 export function getToken(user) {
-  jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7 days' });
+  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7 days' });
 }
 
 export async function getUserFromToken(token, db) {
