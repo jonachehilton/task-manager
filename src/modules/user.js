@@ -1,6 +1,6 @@
 import { gql } from 'apollo-server';
 import bcrypt from 'bcryptjs';
-import { getToken } from '../utils/auth';
+import { getToken } from '../utils/auth.js';
 
 export const typeDef = gql`
   type User {
