@@ -1,15 +1,15 @@
 import { ApolloServer } from 'apollo-server';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { MongoClient } from 'mongodb';
-import merge from 'lodash/merge';
+import merge from 'lodash/merge.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-import { getUserFromToken } from './utils/auth';
-import { typeDef as User, resolvers as userResolvers } from './modules/user';
-import { typeDef as Project, resolvers as projectResolvers } from './modules/project';
-import { typeDef as Task, resolvers as taskResolvers } from './modules/task';
+import { getUserFromToken } from './utils/auth.js';
+import { typeDef as User, resolvers as userResolvers } from './modules/user.js';
+import { typeDef as Project, resolvers as projectResolvers } from './modules/project.js';
+import { typeDef as Task, resolvers as taskResolvers } from './modules/task.js';
 
 const Query = 'type Query';
 const Mutation = 'type Mutation';
